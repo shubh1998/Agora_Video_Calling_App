@@ -1,0 +1,84 @@
+.remote-video-grid {
+  display: grid;
+  gap: 10px;
+  align-items: center;
+  grid-template-columns: repeat(auto-fill, minmax(calc(calc(100%/5)), 1fr));
+}
+
+.remote-video-grid-container {
+  padding: 2rem;
+}
+
+.remote-video-container {
+  position: relative;
+  aspect-ratio: 14/10;
+  overflow: hidden;
+  border: 2px solid #3C4043;
+  border-radius: 10px;
+}
+
+.user-name-container {
+  position: absolute;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.6);
+  color: #ffffff;
+  text-align: center;
+  width: 100%;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.local-video {
+  width: 24vw;
+  aspect-ratio: 14/10;
+  max-width: 450px;
+  min-width: 360px;
+  position: fixed;
+  right: 25px;
+  bottom: 2%;
+  margin: 0;
+  border: 2px solid #099DFD;
+  border-radius: 10px;
+  z-index: 1;
+}
+
+ .br-10 {
+  border-radius: 10px;
+}
+
+.controller-footer {
+  background-color: #000000;
+  position: fixed;
+  bottom: 0%;
+  width: 100%;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.control-btn-container {
+  width: 15%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.invalid-username {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h1, h2 {
+  margin: 0;
+  color: #ffffff;
+}
+
+p {
+  color: #ffffff;
+}
+
+.error-msg {
+  color: #ff0000;
+}

@@ -1,0 +1,17 @@
+
+.header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #099DFD;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.header span {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
