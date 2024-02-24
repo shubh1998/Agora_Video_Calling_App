@@ -93,7 +93,7 @@ const Meeting = ({ userName }) => {
                   <div className='remote-video-container' key={user.uid}>
                     <RemoteUser user={user} className='br-10' />
                     <div className='user-name-container'>
-                      <p className='user-name-label'>{userName}</p>
+                      <p className='user-name-label'>{user.uid}</p>
                     </div>
                   </div>
                 )
