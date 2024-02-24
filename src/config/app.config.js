@@ -1,5 +1,5 @@
 const appConfig = {
-  APP_ID: '88581c4c202543f3b28e32a7925096b6'
+  APP_ID: 'dbc56a89f336402680984ca2491ace49'
 }
 
 export default appConfig

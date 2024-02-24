@@ -12,17 +12,22 @@ const ConnectChannelForm = () => {
   const [invalidUserNameErrorMsg, setInvalidUserNameError] = useState('')
 
   const handleConnect = (e) => {
+    e.preventDefault()
     const trimmedChannelName = channelName.trim()
     const trimmedUserName = channelName.trim()
     if (trimmedChannelName === '') {
-      e.preventDefault()
       setInvalidChannelError("Channel name can't be empty.")
       setChannelName('')
     }
     if (trimmedUserName === '') {
-      e.preventDefault()
       setInvalidUserNameError("User name can't be empty.")
       setUserName('')
+    }
+    if (trimmedChannelName.length > 10) {
+      setInvalidChannelError('Channel name is too long, Max 10 characters are allowed !')
+    }
+    if (trimmedUserName.length > 10) {
+      setInvalidChannelError('Username is too long, Max 10 characters are allowed !')
     }
     if (trimmedUserName && trimmedChannelName) {
       const exactRoute = ROUTE_PATHS.LIVE_CHANNEL.split(':')[0]
@@ -40,7 +45,7 @@ const ConnectChannelForm = () => {
           <div className='input-field'>
             <input
               type='text'
-              className='form-control'
+              className='input-join-room form-control'
               placeholder='Enter channel name to join meeting'
               value={channelName}
               onChange={(e) => {
@@ -53,7 +58,7 @@ const ConnectChannelForm = () => {
           <div className='input-field mt-1'>
             <input
               type='text'
-              className='form-control'
+              className='input-join-room form-control'
               placeholder='Enter Unique UserName to join meeting'
               value={userName}
               onChange={(e) => {

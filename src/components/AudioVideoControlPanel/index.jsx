@@ -1,10 +1,22 @@
 import Button from 'components/Button/index'
 import './audioVideoControlPanel.css'
 
-const AudioVideoControlPanel = ({ handleMicClick, handleCameraClick, handleEndCall, audioOn, videoOn }) => {
+const AudioVideoControlPanel = ({
+  handleMicClick, handleCameraClick, handleEndCall,
+  audioOn, videoOn, handleChatBox, openChatBox
+}) => {
   return (
     <div className='controller-footer'>
       <div className='control-btn-container'>
+        <Button
+          handleClick={handleChatBox}
+          className={`${openChatBox ? 'disable-control' : ''}`}
+          value={
+            openChatBox
+              ? <i class='fa-solid fa-xmark' />
+              : <i class='fa-solid fa-message' />
+          }
+        />
         <Button
           handleClick={handleMicClick}
           className={`${audioOn ? '' : 'disable-control'}`}

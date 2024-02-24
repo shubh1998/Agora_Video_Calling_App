@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import AudioVideoControlPanel from 'components/AudioVideoControlPanel/index'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
@@ -7,8 +7,11 @@ import {
 } from 'agora-rtc-react'
 import appConfig from 'config/app.config'
 import { ROUTE_PATHS } from 'constants/index'
+import ChatBox from '../ChatBox/index'
+import AgoraRTM from 'agora-rtm-sdk'
 
 const Meeting = ({ userName }) => {
+  const signalingEngine = new AgoraRTM.RTM(appConfig.APP_ID, userName, { token: null })
   const navigate = useNavigate()
   const { channelName } = useParams()
   const [activeConnection, setActiveConnection] = useState(true)
@@ -18,6 +21,8 @@ const Meeting = ({ userName }) => {
   const { localCameraTrack } = useLocalCameraTrack(cameraOn)
   const remoteUsers = useRemoteUsers()
   const { audioTracks } = useRemoteAudioTracks(remoteUsers)
+  const [openChatBox, setOpenChatBox] = useState(false)
+  const [chatMessage, setChatMessage] = useState('')
 
   useJoin({
     appid: appConfig.APP_ID,
@@ -37,6 +42,47 @@ const Meeting = ({ userName }) => {
   }
   const handleMicClick = () => setMic(a => !a)
   const handleCameraClick = () => setCamera(a => !a)
+
+  const handleChatBox = () => {
+    setOpenChatBox(!openChatBox)
+  }
+
+  const handleChatMessage = (e) => {
+    setChatMessage(e.target.value)
+  }
+
+  const handleSendMessage = async (e) => {
+    e.preventDefault()
+    const data = JSON.stringify({ userName, message: chatMessage })
+    console.log('channel=====', data, signalingEngine)
+    // await signalingEngine.publish(
+    //   channelName,
+    //   data
+    // )
+  }
+
+  const handleSignalLogin = async () => {
+    console.log('result====', signalingEngine)
+    try {
+      const result = await signalingEngine.login({ uid: userName, token: null })
+      console.log('result====', result)
+      // const subscribeOptions = {
+      //   withMessage: true
+      // }
+      // await signalingEngine.subscribe(channelName, subscribeOptions)
+    } catch (err) {
+      console.log('error occurs at login.', err)
+    }
+  }
+
+  signalingEngine.addEventListener('message', async (eventArgs) => {
+    console.log('chala====', `${eventArgs}`)
+  })
+
+  useEffect(() => {
+    handleSignalLogin()
+  }, [])
+
   return (
     <>
       <div className='remote-video-grid-container my-4'>
@@ -71,12 +117,20 @@ const Meeting = ({ userName }) => {
         </div>
         {/* </div> */}
       </div>
+      <ChatBox
+        openChatBox={openChatBox}
+        handleChatMessage={handleChatMessage}
+        chatMessage={chatMessage}
+        handleSendMessage={handleSendMessage}
+      />
       <AudioVideoControlPanel
         handleMicClick={handleMicClick}
         handleCameraClick={handleCameraClick}
         handleEndCall={handleEndCall}
         audioOn={micOn}
         videoOn={cameraOn}
+        handleChatBox={handleChatBox}
+        openChatBox={openChatBox}
       />
     </>
   )
