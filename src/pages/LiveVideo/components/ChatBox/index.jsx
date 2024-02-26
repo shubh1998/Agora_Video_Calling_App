@@ -2,12 +2,13 @@ import './chatBox.css'
 import Button from 'components/Button/index'
 
 const ChatBox = ({
-  openChatBox, chatMessages = [], handleChatMessage,
-  chatMessage, handleSendMessage
+  openChatBox, chatMessages = [], handleChatMsg,
+  chatMsg, handleSendMessage, userName
 }) => {
   if (!openChatBox) {
     return <></>
   }
+
   return (
     <div className='chat-root-container'>
       <div className='chat-sub-container'>
@@ -18,16 +19,12 @@ const ChatBox = ({
           {
             chatMessages.map(item => (
               <div className='message-box' key={item.message}>
-                <div className='message-user-name'>{item?.userName || 'Demo'}</div>
+                <div className={`${item.userName === userName ? 'user-name-highlighted' : 'message-user-name'}`}>{item?.userName || 'Hidden'}</div>
                 <div className='mt-1'>{item.message}</div>
               </div>
 
             ))
           }
-          {/* <div className='message-box'>
-            <div className='message-user-name'>Rohan</div>
-            <div className='mt-1'>Demo Message</div>
-          </div> */}
         </div>
         <form onSubmit={handleSendMessage}>
           <div className='chat-box-input-footer'>
@@ -37,8 +34,8 @@ const ChatBox = ({
                 type='text'
                 className='input-chat form-control bbl-radius'
                 placeholder='Enter Unique UserName to join meeting'
-                value={chatMessage}
-                onChange={handleChatMessage}
+                value={chatMsg}
+                onChange={handleChatMsg}
               />
             </div>
             <div>

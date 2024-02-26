@@ -44,7 +44,16 @@
 .chat-root-container {
   position: absolute;
   bottom: 8%;
-  margin-left: 1rem
+  margin-left: 1rem;
+}
+
+@media only screen and (max-width: 950px) {
+  .chat-root-container {
+    position: absolute;
+    bottom: 8%;
+    margin-left: 1rem;
+    z-index: 10;
+  }
 }
 
 .chat-sub-container {
@@ -103,4 +112,16 @@
   font-size: 1rem;
   font-weight: 600;
   color: rgb(75, 75, 75);
+  text-transform: capitalize;
+}
+
+.user-name-highlighted {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #01872e;
+  text-transform: capitalize;
+}
+
+.user-name-highlighted:after {
+  content: " (Me)";
 }
