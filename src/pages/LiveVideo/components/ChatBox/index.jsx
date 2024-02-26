@@ -33,7 +33,7 @@ const ChatBox = ({
                 required
                 type='text'
                 className='input-chat form-control bbl-radius'
-                placeholder='Enter Unique UserName to join meeting'
+                placeholder='Type your message...'
                 value={chatMsg}
                 onChange={handleChatMsg}
               />
