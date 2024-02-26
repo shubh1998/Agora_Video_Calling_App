@@ -23,7 +23,8 @@ const useAgoraRtm = ({ userName, channelName }) => {
   const handleMessageReceived = async (data, uid) => {
     const user = await client.getUserAttributes(uid)
     if (data.messageType === 'TEXT') {
-      const newMessageData = { user, message: data.text }
+      const newMessageData = { userName: user?.name, message: data.text }
+      console.log('newMessageData==', newMessageData)
       setCurrentMessage(newMessageData)
     }
   }
