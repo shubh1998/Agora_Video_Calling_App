@@ -2,8 +2,8 @@ import Button from 'components/Button/index'
 import './audioVideoControlPanel.css'
 
 const AudioVideoControlPanel = ({
-  handleMicClick, handleCameraClick, handleEndCall,
-  audioOn, videoOn, handleChatBox, openChatBox
+  handleMicClick, handleCameraClick, handleEndCall, meetingLayout,
+  audioOn, videoOn, handleChatBox, openChatBox, handleChangeMeetingLayout
 }) => {
   return (
     <div className='controller-footer'>
@@ -30,9 +30,9 @@ const AudioVideoControlPanel = ({
           handleClick={handleCameraClick}
           className={`${videoOn ? '' : 'disable-control'}`}
           value={
-              videoOn
-                ? <i class='fa-solid fa-video' />
-                : <i class='fa-solid fa-video-slash' />
+            videoOn
+              ? <i class='fa-solid fa-video' />
+              : <i class='fa-solid fa-video-slash' />
           }
         />
         <Button
@@ -40,6 +40,13 @@ const AudioVideoControlPanel = ({
           className='end-call-btn'
           value={
             <i class='fa-solid fa-phone' />
+          }
+        />
+        <Button
+          handleClick={handleChangeMeetingLayout}
+          className={`${meetingLayout ? 'disable-control' : ''}`}
+          value={
+            <i class='fa-solid fa-laptop' />
           }
         />
       </div>

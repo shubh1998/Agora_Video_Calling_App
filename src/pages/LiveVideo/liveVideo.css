@@ -17,6 +17,25 @@
   border-radius: 10px;
 }
 
+.remote-video-container-second-layout {
+  position: relative;
+  max-width: 95%;
+  margin: 0;
+  aspect-ratio: 2/2;
+  overflow: hidden;
+  border: 5px solid #3C4043;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.remote-video-grid-second-layout {
+  display: grid;
+  gap: 10px;
+  align-items: center;
+  grid-template-columns: repeat(auto-fill, minmax(calc(calc(50%/2)), 1fr));
+  padding: 5px;
+}
+
 .user-name-container {
   position: absolute;
   bottom: 0;
@@ -37,6 +56,17 @@
   right: 25px;
   bottom: 70px;
   margin: 0;
+  border: 2px solid #099DFD;
+  border-radius: 10px;
+  z-index: 1;
+}
+
+.local-video-second-layout {
+  position: relative;
+  height: 80vh;
+  max-width: 50%;
+  margin: 0;
+  width: 100%;
   border: 2px solid #099DFD;
   border-radius: 10px;
   z-index: 1;
