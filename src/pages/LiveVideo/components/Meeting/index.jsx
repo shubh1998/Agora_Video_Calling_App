@@ -16,7 +16,7 @@ const Meeting = ({ userName }) => {
   const [openChatBox, setOpenChatBox] = useState(false)
   const {
     handleDisconnectCall, remoteUsers, localCameraTrack,
-    localMicrophoneTrack
+    localMicrophoneTrack, activeSpeakers
   } = useAgoraRtc({ channelName, userName, cameraOn, micOn })
   const { messages, sendChannelMessage } = useAgoraRtm({ userName, channelName })
 
@@ -47,6 +47,11 @@ const Meeting = ({ userName }) => {
     e.preventDefault()
   }
 
+  const handleAddActiveSpeakerClass = (uid) => {
+    const highlightActiveSpeaker = activeSpeakers.find(item => ((item.uid === uid) && (item.level > 0)))
+    return highlightActiveSpeaker ? 'highlight-speaker' : ''
+  }
+
   return (
     <>
       <div className='remote-video-grid-container my-4'>
@@ -54,7 +59,7 @@ const Meeting = ({ userName }) => {
           {
             remoteUsers.map(user => {
               return (
-                <div className='remote-video-container' key={user.uid}>
+                <div className={`remote-video-container ${handleAddActiveSpeakerClass(user.uid)}`} key={user.uid}>
                   <RemoteUser user={user} className='br-10' />
                   <div className='user-name-container'>
                     <p className='user-name-label'>{user.uid}</p>
@@ -65,7 +70,7 @@ const Meeting = ({ userName }) => {
           }
         </div>
       </div>
-      <div className='local-video'>
+      <div className={`local-video ${handleAddActiveSpeakerClass(userName)}`}>
         <LocalUser
           className='br-10'
           audioTrack={localMicrophoneTrack}
