@@ -1,6 +1,7 @@
 import {
   useLocalCameraTrack, useLocalMicrophoneTrack, useJoin,
-  usePublish, useRemoteUsers, useRemoteAudioTracks, useRTCClient
+  usePublish, useRemoteUsers, useRemoteAudioTracks, useRTCClient,
+  useTrackEvent
 } from 'agora-rtc-react'
 import appConfig from 'config/app.config'
 import { deleteChatHistoryFromSession } from 'helpers/sessionstorage.helpers'
@@ -31,6 +32,8 @@ const useAgoraRtc = ({ channelName, userName, cameraOn, micOn }) => {
     deleteChatHistoryFromSession()
     window.history.replaceState({}, '')
   }
+
+  useTrackEvent(client, 'video-element-visible-status', () => {})
 
   useEffect(() => {
     client.enableAudioVolumeIndicator()

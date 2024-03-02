@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import AudioVideoControlPanel from 'components/AudioVideoControlPanel/index'
 import { useParams, useNavigate } from 'react-router-dom'
 import { ROUTE_PATHS } from 'constants/index'
@@ -6,7 +6,6 @@ import ChatBox from '../ChatBox/index'
 import useAgoraRtm from 'hooks/useAgoraRtm'
 import { LocalUser, RemoteUser } from 'agora-rtc-react'
 import useAgoraRtc from 'hooks/useAgoraRtc'
-
 const Meeting = ({ userName }) => {
   const navigate = useNavigate()
   const { channelName } = useParams()
@@ -20,6 +19,8 @@ const Meeting = ({ userName }) => {
   } = useAgoraRtc({ channelName, userName, cameraOn, micOn })
   const { messages, sendChannelMessage } = useAgoraRtm({ userName, channelName })
   const [meetingLayout, setMeetingLayout] = useState(true)
+  const [activeSpeakerInMeetingLayout, setActiveSpeakerInLayout] = useState(null)
+  const [localActiveUser, setActiveLocalUser] = useState(true)
 
   const handleEndCall = (e) => {
     e.preventDefault()
@@ -55,6 +56,56 @@ const Meeting = ({ userName }) => {
 
   const handleChangeMeetingLayout = () => {
     setMeetingLayout(!meetingLayout)
+  }
+
+  const activeSpeakerInMeeting = activeSpeakers.sort((a, b) => b.level - a.level)[0]
+
+  useEffect(() => {
+    setActiveSpeakerInLayout(activeSpeakerInMeeting)
+  }, [activeSpeakerInMeeting])
+
+  const RenderActiveUser = () => {
+    if (activeSpeakerInMeetingLayout?.uid === userName) {
+      setActiveLocalUser(true)
+      return (
+        <>
+          <LocalUser
+            className='br-10'
+            audioTrack={localMicrophoneTrack}
+            videoTrack={localCameraTrack}
+            cameraOn={cameraOn}
+            micOn={micOn}
+            playAudio={micOn}
+            playVideo={cameraOn}
+          />
+          <div className='user-name-container'>
+            <p className='user-name-label'>{userName}</p>
+          </div>
+        </>
+      )
+    } else {
+      setActiveLocalUser(false)
+
+      const user = remoteUsers.find(user => {
+        if (user.uid === activeSpeakerInMeetingLayout.uid) {
+          return user
+        }
+        return null
+      })
+
+      if (!user) {
+        return <></>
+      }
+
+      return (
+        <>
+          <RemoteUser user={user} className='br-10' />
+          <div className='user-name-container'>
+            <p className='user-name-label'>{user.uid}</p>
+          </div>
+        </>
+      )
+    }
   }
 
   return (
@@ -97,32 +148,44 @@ const Meeting = ({ userName }) => {
             )
           : (
             <div style={{ display: 'flex', justifyContent: 'space-between', maxHeight: '85vh', overflowY: 'scroll', marginTop: '75px' }}>
-              <div className={`local-video-second-layout ${handleAddActiveSpeakerClass(userName)}`}>
-                <LocalUser
-                  className='br-10'
-                  audioTrack={localMicrophoneTrack}
-                  videoTrack={localCameraTrack}
-                  cameraOn={cameraOn}
-                  micOn={micOn}
-                  playAudio={micOn}
-                  playVideo={cameraOn}
-                />
-                <div className='user-name-container'>
-                  <p className='user-name-label'>{userName}</p>
-                </div>
+              <div className='local-video-second-layout highlight-speaker'>
+                <RenderActiveUser />
               </div>
               <div className='remote-video-container-second-layout'>
                 <div className='remote-video-grid-second-layout '>
                   {
-                    remoteUsers.map(user => {
-                      return (
-                        <div className={`remote-video-container-second-layout ${handleAddActiveSpeakerClass(user.uid)}`} key={user.uid}>
-                          <RemoteUser user={user} className='br-10' />
+                    !localActiveUser
+                      ? (
+                        <div className='remote-video-container-second-layout'>
+                          <LocalUser
+                            className='br-10'
+                            audioTrack={localMicrophoneTrack}
+                            videoTrack={localCameraTrack}
+                            cameraOn={cameraOn}
+                            micOn={micOn}
+                            playAudio={micOn}
+                            playVideo={cameraOn}
+                          />
                           <div className='user-name-container'>
-                            <p className='user-name-label'>{user.uid}</p>
+                            <p className='user-name-label'>{userName}</p>
                           </div>
                         </div>
-                      )
+                        )
+                      : <></>
+                  }
+                  {
+                    // eslint-disable-next-line
+                    remoteUsers.map(user => {
+                      if (user.uid !== activeSpeakerInMeetingLayout.uid) {
+                        return (
+                          <div className='remote-video-container-second-layout' key={user.uid}>
+                            <RemoteUser user={user} className='br-10' />
+                            <div className='user-name-container'>
+                              <p className='user-name-label'>{user.uid}</p>
+                            </div>
+                          </div>
+                        )
+                      }
                     })
                   }
                 </div>
