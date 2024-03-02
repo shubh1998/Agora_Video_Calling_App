@@ -44,7 +44,7 @@ const AudioVideoControlPanel = ({
         />
         <Button
           handleClick={handleChangeMeetingLayout}
-          className={`${meetingLayout ? 'disable-control' : ''}`}
+          className={`${meetingLayout ? '' : 'disable-control'}`}
           value={
             <i class='fa-solid fa-laptop' />
           }
